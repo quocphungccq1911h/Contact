@@ -4,8 +4,8 @@
     {
         public class LimitContact
         {
-            public const int PhoneNumberLimit = 500;
-            public const int IpAddressLimit = 500;
+            public const int PhoneNumberLimit = 5;
+            public const int IpAddressLimit = 5;
         }
     }
 }
