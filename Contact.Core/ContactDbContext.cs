@@ -5,7 +5,7 @@ namespace Contact.Core
 {
     public class ContactDbContext : DbContext
     {
-        public ContactDbContext(DbContextOptions options) : base(options)
+        public ContactDbContext(DbContextOptions<ContactDbContext> options) : base(options)
         {
         }
         public virtual DbSet<ContactCustomer> ContactCustomers { get; set; }

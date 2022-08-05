@@ -1,5 +1,40 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Contact.Domain.PostViewModel
+@model PostContactCustomerVM
 @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@if (TempData["SuccessMsg"] != null)
+{
+    <h1>Bạn đã liên hệ thành công</h1>
+}
+else if (TempData["ErrorMsg"] != null)
+{
+    <h1>Liên hệ không thành công</h1>
+}
+else
+{
+    <form asp-action="Index" asp-controller="Home" method="post">
+        <h2>Trang liên hệ</h2>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Họ tên</label>
+            <input type="text" asp-for="Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào họ tên" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Số điện thoại</label>
+            <input type="number" asp-for="Phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào số điện thoại" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email</label>
+            <input type="email" asp-for="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào email" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Nội dung</label>
+            <textarea class="form-control" asp-for="Content" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập vào nội dung liên hệ" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Gửi đi</button>
+    </form>
+}
+
+
