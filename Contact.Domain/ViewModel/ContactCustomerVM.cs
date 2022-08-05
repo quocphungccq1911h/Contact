@@ -11,5 +11,6 @@ namespace Contact.Domain.ViewModel
         public string Email { get; set; }
         public string Content { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string IPAddress { get; set; }
     }
 }

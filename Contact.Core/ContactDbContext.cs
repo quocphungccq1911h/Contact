@@ -5,14 +5,15 @@ namespace Contact.Core
 {
     public class ContactDbContext : DbContext
     {
-        public ContactDbContext(DbContextOptions<ContactDbContext> options) : base(options)
+        public ContactDbContext(DbContextOptions options) : base(options)
         {
         }
-        public virtual DbSet<ContactCustomer> ContactCustomers { get; set; }
+        public DbSet<ContactCustomer> ContactCustomers { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
     }
 }

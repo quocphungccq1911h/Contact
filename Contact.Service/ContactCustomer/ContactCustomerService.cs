@@ -4,7 +4,10 @@ using Contact.Domain.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
+using static Contact.Service.Constant.Constants;
 
 namespace Contact.Service.ContactCustomer
 {
@@ -25,17 +28,23 @@ namespace Contact.Service.ContactCustomer
                 ID = x.ID,
                 Name = x.Name,
                 Phone = x.Phone,
+                IPAddress = x.IPAddress
             }).OrderBy(x => x.CreateDate));
             return data;
         }
         public async Task<Core.Models.ContactCustomer> Add(PostContactCustomerVM model)
         {
-            int count = await _repository.GetAll()
+            int countNumber = await _repository.GetAll()
                 .Where(x=>x.Phone.Equals(model.Phone) 
                 && x.CreateDate.Value.Day.Equals(DateTime.Now.Day) 
                 && x.CreateDate.Value.Month.Equals(DateTime.Now.Month) 
                 && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
-            if (count > 5)
+            int countIpAddress = await _repository.GetAll()
+                .Where(x=>x.IPAddress.Equals(GetLocalIPAddress())
+                && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
+                && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
+                && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
+            if (countNumber > LimitContact.PhoneNumberLimit || countIpAddress > LimitContact.IpAddressLimit)
             {
                 throw new Exception("Không thể liên hệ thêm");
             }
@@ -45,11 +54,25 @@ namespace Contact.Service.ContactCustomer
                 CreateDate = DateTime.Now,
                 Email = model.Email,
                 Name = model.Name,
-                Phone = model.Phone
+                Phone = model.Phone,
+                IPAddress = GetLocalIPAddress()
             };
             await _repository.AddAsync(data);
             await _repository.SaveNowAsync();
             return data;
+        }
+        // get IP
+        private static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
     }
 }
