@@ -33,14 +33,14 @@ namespace Contact.App.Controllers
             try
             {
                 var result = await _service.CreateContact(model);
-                if (result)
+                if (result.IsSuccessed)
                 {
                     TempData["SuccessMsg"] = "Cám ơn bạn đã liên hệ";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["ErrorMsg"] = "Liên hệ không thành công";
+                    TempData["ErrorMsg"] = result.Message;
                     return View();
                 }
             }

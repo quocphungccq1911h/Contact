@@ -1,4 +1,5 @@
 ﻿using Contact.Domain.PostViewModel;
+using Contact.Domain.ResultAPI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -23,24 +24,17 @@ namespace Contact.App.Services.Contact
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<bool> CreateContact(PostContactCustomerVM model)
+        public async Task<ApiResult<bool>> CreateContact(PostContactCustomerVM model)
         {
             var json = JsonConvert.SerializeObject(model);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
             var response = await client.PostAsync("/api/ContactCustomers", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-            {
-                var test = response.RequestMessage.Content.ToString();
-                return true;
-            }
-            else
-            {
-                var test = response.RequestMessage.Content.ToString();
-                return false;
-            }
-            
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Contact.Core.Repository;
 using Contact.Domain.PostViewModel;
+using Contact.Domain.ResultAPI;
 using Contact.Domain.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,7 +33,7 @@ namespace Contact.Service.ContactCustomer
             }).OrderBy(x => x.CreateDate));
             return data;
         }
-        public async Task<Core.Models.ContactCustomer> Add(PostContactCustomerVM model)
+        public async Task<ApiResult<bool>> Add(PostContactCustomerVM model)
         {
             int countNumber = await _repository.GetAll()
                 .Where(x=>x.Phone.Equals(model.Phone) 
@@ -46,7 +47,7 @@ namespace Contact.Service.ContactCustomer
                 && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
             if (countNumber > LimitContact.PhoneNumberLimit || countIpAddress > LimitContact.IpAddressLimit)
             {
-                throw new Exception("Không thể liên hệ thêm");
+                return new ApiErrorResult<bool>("Đạt giới hạn liên hệ trong ngày. Không thể liên hệ thêm");
             }
             var data = new Core.Models.ContactCustomer()
             {
@@ -57,9 +58,14 @@ namespace Contact.Service.ContactCustomer
                 Phone = model.Phone,
                 IPAddress = GetLocalIPAddress()
             };
+            
             await _repository.AddAsync(data);
-            await _repository.SaveNowAsync();
-            return data;
+            var result = await _repository.SaveNowAsync();
+            if (result)
+            {
+                return new ApiSuccessResult<bool>();
+            }
+            return new ApiErrorResult<bool>("Liên hệ không thành công");
         }
         // get IP
         private static string GetLocalIPAddress()

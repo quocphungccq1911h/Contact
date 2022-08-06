@@ -31,7 +31,11 @@ namespace Contact.API.Controllers
             try
             {
                 var res = await _service.Add(model);
-                return Created("Đã tạo liên hệ thành công", res);
+                if (!res.IsSuccessed)
+                {
+                    return BadRequest(res);
+                }
+                return Ok(res);
             }
             catch (Exception ex)
             {
