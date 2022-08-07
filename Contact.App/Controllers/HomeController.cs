@@ -24,11 +24,11 @@ namespace Contact.App.Controllers
         public IActionResult Index()
         {
             PostContactCustomerVM model = new PostContactCustomerVM();
-            if (Request.Cookies["name"] != null)
+            if (Request.Cookies[SystemConstants.Cookie] != null)
             {
-                model.Name = Request.Cookies["name"];
-                model.Email = Request.Cookies["email"];
-                model.Phone = Request.Cookies["phone"];
+                model.Name = Request.Cookies[SystemConstants.CookieContact.Name];
+                model.Email = Request.Cookies[SystemConstants.CookieContact.Email];
+                model.Phone = Request.Cookies[SystemConstants.CookieContact.Phone];
             }
             return View(model);
         }
@@ -47,9 +47,10 @@ namespace Contact.App.Controllers
                 {
                     CookieOptions options = new CookieOptions();
                     options.Expires = DateTime.Now.AddDays(7);
-                    Response.Cookies.Append("name", model.Name, options);
-                    Response.Cookies.Append("email", model.Email, options);
-                    Response.Cookies.Append("phone", model.Phone, options);
+                    Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
+                    Response.Cookies.Append(SystemConstants.CookieContact.Name, model.Name, options);
+                    Response.Cookies.Append(SystemConstants.CookieContact.Email, model.Email, options);
+                    Response.Cookies.Append(SystemConstants.CookieContact.Phone, model.Phone, options);
                     options.Expires = DateTime.Now.AddDays(7);
 
                     TempData["SuccessMsg"] = "Cám ơn bạn đã liên hệ";
@@ -66,29 +67,13 @@ namespace Contact.App.Controllers
                 throw new Exception(ex.Message);
             }
         }
-        public IActionResult Create()
+        public IActionResult Remove()
         {
-
+            CookieOptions options = new CookieOptions();
+            options.Expires = DateTime.Now;
+            Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
             return View();
         }
-        public IActionResult Read()
-        {
-            //string key = "DemoCookie";
-            var CookieValue1 = Request.Cookies["name"];
-            var CookieValue2 = Request.Cookies["email"];
-            var CookieValue3 = Request.Cookies["phone"];
-            return View();
-        }
-        //public IActionResult Remove()
-        //{
-        //    string key = "DemoCookie";
-        //    string value = DateTime.Now.ToString();
-
-        //    CookieOptions options = new CookieOptions();
-        //    options.Expires = DateTime.Now.AddDays(-1);
-        //    Response.Cookies.Append(key, value, options);
-        //    return View();
-        //}
 
     }
 }

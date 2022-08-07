@@ -10,5 +10,11 @@
             public const string Token = "Token";
             public const string BaseAddress = "BaseAddress";
         }
+        public class CookieContact
+        {
+            public const string Name = "name";
+            public const string Email = "email";
+            public const string Phone = "phone";
+        }
     }
 }
