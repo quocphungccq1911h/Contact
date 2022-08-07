@@ -4,6 +4,11 @@
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+@section Scripts{
+
+  <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+}
 @addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 
 @if (TempData["SuccessMsg"] != null)
@@ -17,18 +22,18 @@ else if (TempData["ErrorMsg"] != null)
 }
 else
 {
-    <form asp-action="Index" asp-controller="Home" method="post">
+    <form asp-action="Index" asp-controller="Home" method="post" id="frmSaveData">
         <div asp-validation-summary="All" class="text-danger">
         </div>
         <h2>Trang liên hệ</h2>
         <div class="form-group">
             <label for="exampleInputEmail1">Họ tên</label>
-            <input type="text" asp-for="Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào họ tên" required>
+            <input type="text" asp-for="Name" class="form-control" id="txtName" aria-describedby="emailHelp" placeholder="Nhập vào họ tên" required>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Số điện thoại</label>
-            <input type="tel" asp-for="Phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào số điện thoại" required>
+            <input pattern="(0[3|5|7|8|9])+([0-9]{8})" type="tel" asp-for="Phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào số điện thoại" required>
             <span asp-validation-for="Phone" class="text-danger"></span>
         </div>
         <div class="form-group">

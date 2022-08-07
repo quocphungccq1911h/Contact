@@ -42,6 +42,7 @@ namespace Contact.App.Controllers
             }
             try
             {
+
                 var result = await _service.CreateContact(model);
                 if (result.IsSuccessed)
                 {

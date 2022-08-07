@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Contact.Service.Constant.Constants;
 
@@ -35,13 +37,14 @@ namespace Contact.Service.ContactCustomer
         }
         public async Task<ApiResult<bool>> Add(PostContactCustomerVM model)
         {
-            int countNumber = await _repository.GetAll()
-                .Where(x=>x.Phone.Equals(model.Phone) 
-                && x.CreateDate.Value.Day.Equals(DateTime.Now.Day) 
-                && x.CreateDate.Value.Month.Equals(DateTime.Now.Month) 
+            var check = IsPhoneNumber(model.Phone);
+                int countNumber = await _repository.GetAll()
+                .Where(x => x.Phone.Equals(model.Phone)
+                && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
+                && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
                 && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
             int countIpAddress = await _repository.GetAll()
-                .Where(x=>x.IPAddress.Equals(GetLocalIPAddress())
+                .Where(x => x.IPAddress.Equals(GetLocalIPAddress())
                 && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
                 && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
                 && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
@@ -58,7 +61,7 @@ namespace Contact.Service.ContactCustomer
                 Phone = model.Phone,
                 IPAddress = GetLocalIPAddress()
             };
-            
+
             await _repository.AddAsync(data);
             var result = await _repository.SaveNowAsync();
             if (result)
@@ -79,6 +82,10 @@ namespace Contact.Service.ContactCustomer
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+        private bool IsPhoneNumber(string number)
+        {
+            return Regex.Match(number, @"(0[3|5|7|8|9])+([0-9]{8})").Success;
         }
     }
 }

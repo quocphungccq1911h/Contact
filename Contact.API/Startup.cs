@@ -8,11 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Linq;
 
 namespace Contact.API
 {
     public class Startup
     {
+        private const string DefaultCorsPolicyName = "http://www.dcxmotobike.somee.com";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,6 +26,22 @@ namespace Contact.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //Configure CORS 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
+                    builder.WithOrigins(Configuration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).ToArray())
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IContactCustomerService, ContactCustomerService>();
             services.AddControllers();
