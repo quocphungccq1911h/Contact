@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Contact.Service.Constant.Constants;
@@ -37,18 +36,17 @@ namespace Contact.Service.ContactCustomer
         }
         public async Task<ApiResult<bool>> Add(PostContactCustomerVM model)
         {
-            var check = IsPhoneNumber(model.Phone);
-                int countNumber = await _repository.GetAll()
-                .Where(x => x.Phone.Equals(model.Phone)
-                && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
-                && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
-                && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
+            int countNumber = await _repository.GetAll()
+            .Where(x => x.Phone.Equals(model.Phone)
+            && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
+            && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
+            && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
             int countIpAddress = await _repository.GetAll()
                 .Where(x => x.IPAddress.Equals(GetLocalIPAddress())
                 && x.CreateDate.Value.Day.Equals(DateTime.Now.Day)
                 && x.CreateDate.Value.Month.Equals(DateTime.Now.Month)
                 && x.CreateDate.Value.Year.Equals(DateTime.Now.Year)).CountAsync();
-            if (countNumber > LimitContact.PhoneNumberLimit || countIpAddress > LimitContact.IpAddressLimit)
+            if (countNumber >= LimitContact.PhoneNumberLimit || countIpAddress >= LimitContact.IpAddressLimit)
             {
                 return new ApiErrorResult<bool>("Đạt giới hạn liên hệ trong ngày. Không thể liên hệ thêm");
             }

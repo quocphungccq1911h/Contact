@@ -17,7 +17,7 @@ namespace Contact.App
 {
     public class Startup
     {
-        private const string DefaultCorsPolicyName = "http://www.dcxmotobike.somee.com";
+        //private const string DefaultCorsPolicyName = "http://www.dcxmotobike.somee.com";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,19 +29,19 @@ namespace Contact.App
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //Configure CORS 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
-                {
-                    //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
-                    builder.WithOrigins(Configuration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).ToArray())
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            ////Configure CORS 
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(DefaultCorsPolicyName, builder =>
+            //    {
+            //        //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
+            //        builder.WithOrigins(Configuration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).ToArray())
+            //            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            //            .AllowAnyHeader()
+            //            .AllowAnyMethod()
+            //            .AllowCredentials();
+            //    });
+            //});
             services.AddRazorPages();
             services.AddHttpClient();
 

@@ -47,7 +47,6 @@ namespace Contact.App.Controllers
                 if (result.IsSuccessed)
                 {
                     CookieOptions options = new CookieOptions();
-                    options.Expires = DateTime.Now.AddDays(7);
                     Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
                     Response.Cookies.Append(SystemConstants.CookieContact.Name, model.Name, options);
                     Response.Cookies.Append(SystemConstants.CookieContact.Email, model.Email, options);

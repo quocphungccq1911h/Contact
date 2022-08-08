@@ -15,7 +15,7 @@ namespace Contact.API
 {
     public class Startup
     {
-        private const string DefaultCorsPolicyName = "http://www.dcxmotobike.somee.com";
+        //private const string DefaultCorsPolicyName = "http://www.dcxmotobike.somee.com";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,18 +28,18 @@ namespace Contact.API
         {
 
             //Configure CORS 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(DefaultCorsPolicyName, builder =>
-                {
-                    //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
-                    builder.WithOrigins(Configuration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).ToArray())
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(DefaultCorsPolicyName, builder =>
+            //    {
+            //        //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
+            //        builder.WithOrigins(Configuration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).ToArray())
+            //            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            //            .AllowAnyHeader()
+            //            .AllowAnyMethod()
+            //            .AllowCredentials();
+            //    });
+            //});
 
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
