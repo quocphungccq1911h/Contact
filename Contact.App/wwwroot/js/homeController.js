@@ -2,6 +2,7 @@
     init: function () {
         homeController.validationForm();
         homeController.registerEvents();
+        
     },
     //submit form
     registerEvents: function () {
@@ -13,6 +14,7 @@
                 let email = $('#txtEmail').val().trim();
                 let content = $('#txtContent').val().trim();
                 var url = $("#frmSaveData").attr("action");
+                homeController.doWorkbtn();
                 $.ajax({
                     url: url,
                     type: 'POST',
@@ -24,8 +26,8 @@
                     },
                     success: function (res) {
                         if (res.isSuccessed == true) {
-                            alert("Thêm liên hệ thành công");
-                            window.location = '/'
+                            /*alert("Thêm liên hệ thành công");*/
+                            window.location.href = "/Home/ContactSuccess";
                         } else if (res.messages != null) {
                             alert(res.messages);
                         } else {
@@ -39,6 +41,13 @@
             }
         });
     },
+    doWorkbtn: function () {
+        $('#btnsubmit').on("click", function () {
+            $(this).attr("disabled", "disabled");
+            doWork(); //this method contains your logic
+        });
+    },
+    
     // validate form with ajax
     validationForm: function () {
         $('#frmSaveData').validate({
@@ -79,6 +88,7 @@
             }
         });
     }
+
 }
 homeController.init();
 // validate phone number of vietnam
@@ -87,3 +97,9 @@ jQuery.validator.addMethod("validationPhone", function (phone_number, element) {
     return this.optional(element) || phone_number.length == 10 &&
         phone_number.match(/(0[3|5|7|8|9])+([0-9]{8})/g);
 });
+function doWork() {
+    alert("Bạn đang gửi form");
+    //actually this function will do something and when processing is done the button is enabled by removing the 'disabled' attribute
+    //I use setTimeout so you can see the button can only be clicked once, and can't be clicked again while work is being done
+    setTimeout('$("#btn").removeAttr("disabled")', 1500);
+}

@@ -85,6 +85,10 @@ namespace Contact.App.Controllers
             }
             return Json(result);
         }
+        public IActionResult ContactSuccess()
+        {
+            return View();
+        }
 
     }
 }
