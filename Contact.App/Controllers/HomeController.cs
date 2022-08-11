@@ -2,6 +2,7 @@
 using Contact.Domain.PostViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -32,47 +33,57 @@ namespace Contact.App.Controllers
             }
             return View(model);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Index(PostContactCustomerVM model)
+        //{
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(ModelState);
+        //    }
+        //    try
+        //    {
+
+        //        var result = await _service.CreateContact(model);
+        //        if (result.IsSuccessed)
+        //        {
+        //            CookieOptions options = new CookieOptions();
+        //            Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
+        //            Response.Cookies.Append(SystemConstants.CookieContact.Name, model.Name, options);
+        //            Response.Cookies.Append(SystemConstants.CookieContact.Email, model.Email, options);
+        //            Response.Cookies.Append(SystemConstants.CookieContact.Phone, model.Phone, options);
+        //            options.Expires = DateTime.Now.AddDays(7);
+
+        //            TempData["SuccessMsg"] = "Cám ơn bạn đã liên hệ";
+        //            return RedirectToAction("Index");
+        //        }
+        //        else
+        //        {
+        //            TempData["ErrorMsg"] = result.Message;
+        //            return View();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Index(PostContactCustomerVM model)
+        public async Task<JsonResult> Index(PostContactCustomerVM model)
         {
-
-            if (!ModelState.IsValid)
+            
+            var result = await _service.CreateContact(model);
+            if (result.IsSuccessed)
             {
-                return View(ModelState);
+                CookieOptions options = new CookieOptions();
+                Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
+                Response.Cookies.Append(SystemConstants.CookieContact.Name, model.Name, options);
+                Response.Cookies.Append(SystemConstants.CookieContact.Email, model.Email, options);
+                Response.Cookies.Append(SystemConstants.CookieContact.Phone, model.Phone, options);
+                options.Expires = DateTime.Now.AddDays(7);
             }
-            try
-            {
-
-                var result = await _service.CreateContact(model);
-                if (result.IsSuccessed)
-                {
-                    CookieOptions options = new CookieOptions();
-                    Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
-                    Response.Cookies.Append(SystemConstants.CookieContact.Name, model.Name, options);
-                    Response.Cookies.Append(SystemConstants.CookieContact.Email, model.Email, options);
-                    Response.Cookies.Append(SystemConstants.CookieContact.Phone, model.Phone, options);
-                    options.Expires = DateTime.Now.AddDays(7);
-
-                    TempData["SuccessMsg"] = "Cám ơn bạn đã liên hệ";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    TempData["ErrorMsg"] = result.Message;
-                    return View();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public IActionResult Remove()
-        {
-            CookieOptions options = new CookieOptions();
-            options.Expires = DateTime.Now;
-            Response.Cookies.Append(SystemConstants.Cookie, SystemConstants.Cookie, options);
-            return View();
+            return Json(result);
         }
 
     }

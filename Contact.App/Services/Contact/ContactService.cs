@@ -1,9 +1,11 @@
 ﻿using Contact.Domain.PostViewModel;
 using Contact.Domain.ResultAPI;
+using Contact.Domain.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +37,11 @@ namespace Contact.App.Services.Contact
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(result);
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
+        }
+        public async Task<List<ContactCustomerVM>> GetAll()
+        {
+            var list = await GetListAsync<ContactCustomerVM>($"/api/ContactCustomers");
+            return list;
         }
     }
 }

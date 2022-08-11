@@ -32,6 +32,11 @@ namespace Contact.App
             services.AddRazorPages();
             services.AddHttpClient();
 
+            services.AddSession(options =>
+            {
+                options.IOTimeout = TimeSpan.FromMinutes(30);
+            });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IContactService, ContactService>();
         }

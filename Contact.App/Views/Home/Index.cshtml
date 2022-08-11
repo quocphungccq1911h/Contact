@@ -4,14 +4,41 @@
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-@*@section Scripts{
+@section Scripts{
 
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/js/homeController.js"></script>
 
-}*@
+}
     @addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 
+    @*<div id="abc">
+</div>*@
+
+    @*<form id="frmSaveData" method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
+
+    <h2>Trang liên hệ</h2>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Họ tên</label>
+        <input type="text" name="name" asp-for="Name" class="form-control" id="txtName"  placeholder="Nhập vào họ tên">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Số điện thoại</label>
+        <input type="tel" name="phone" asp-for="Phone" class="form-control" id="txtPhone" placeholder="Nhập vào số điện thoại">
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email</label>
+        <input type="email" asp-for="Email" class="form-control" name="email" id="txtEmail" placeholder="Nhập vào email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Nội dung</label>
+        <textarea class="form-control" asp-for="Content" name="content" id="txtContent" rows="3" placeholder="Nhập vào nội dung liên hệ" ></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <button type="button" id="btnsubmit"> Gửi đi</button>
+</form>*@
     @if (TempData["SuccessMsg"] != null)
 {
     <h1>Bạn đã liên hệ thành công</h1>
@@ -23,35 +50,33 @@ else if (TempData["ErrorMsg"] != null)
 }
 else
 {
-    <form asp-action="Index" asp-controller="Home" method="post" id="frmSaveData">
+    <form asp-action="Index" asp-controller="Home" enctype="multipart/form-data" method="post" id="frmSaveData">
         <div asp-validation-summary="All" class="text-danger">
         </div>
         <h2>Trang liên hệ</h2>
         <div class="form-group">
             <label for="exampleInputEmail1">Họ tên</label>
-            <input type="text" asp-for="Name" class="form-control" oninvalid="this.setCustomValidity('Vui lòng nhập họ tên')"
-               oninput="this.setCustomValidity('')" id="txtName" aria-describedby="emailHelp" placeholder="Nhập vào họ tên" required>
+            <input type="text" asp-for="Name" class="form-control" id="txtName" aria-describedby="emailHelp" placeholder="Nhập vào họ tên" required>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Số điện thoại</label>
-            <input pattern="(0[3|5|7|8|9])+([0-9]{8})" type="tel" asp-for="Phone" oninvalid="this.setCustomValidity('Số điện thoại không đúng')" oninput="this.setCustomValidity('')" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào số điện thoại" required>
+            <input pattern="(0[3|5|7|8|9])+([0-9]{8})" type="tel" asp-for="Phone" class="form-control" id="txtPhone" aria-describedby="emailHelp" placeholder="Nhập vào số điện thoại" required>
             <span asp-validation-for="Phone" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Email</label>
-            <input type="email" asp-for="Email" class="form-control" oninvalid="this.setCustomValidity('Địa chỉ email không đúng')"
-               oninput="this.setCustomValidity('')" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập vào email" required>
+            <input type="email" asp-for="Email" class="form-control" id="txtEmail" aria-describedby="emailHelp" placeholder="Nhập vào email" required>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Nội dung</label>
-            <textarea class="form-control" asp-for="Content" oninvalid="this.setCustomValidity('Vui lòng nhập vào nội dung liên hệ')"
-  oninput="this.setCustomValidity('')" id="exampleFormControlTextarea1" rows="3" placeholder="Nhập vào nội dung liên hệ" required></textarea>
+            <textarea class="form-control" asp-for="Content" id="txtContent" rows="3" placeholder="Nhập vào nội dung liên hệ" required></textarea>
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Gửi đi</button>
+        <button id="btnsubmit" type="submit" class="btn btn-primary">Gửi đi</button>
     </form>
 }
+
 
 

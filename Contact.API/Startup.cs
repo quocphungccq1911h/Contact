@@ -49,6 +49,12 @@ namespace Contact.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contact.API v1"));
             }
+            if (env.IsProduction() || env.IsStaging())
+            {
+                app.UseExceptionHandler("/Error/index.html");
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contact.API v1"));
+            }
 
             app.UseHttpsRedirection();
 
